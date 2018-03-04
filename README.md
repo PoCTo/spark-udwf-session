@@ -1,6 +1,8 @@
 # spark-udwf-session
 a spark custom window function example, to generate session IDs
 
+A forked version of the UDWF from rcongiu. Here sessions numbers are non-random successive integers.
+
 Usage
 --------------------
 
@@ -29,13 +31,13 @@ result similar to this (UUIDs are randomly generated).
 +-----+-------------+------------------------------------+------------------------------------+
 |user |ts           |session                             |newsession                          |
 +-----+-------------+------------------------------------+------------------------------------+
-|user1|1509036478537|f237e656-1e53-4a24-9ad5-2b4576a4125d|f237e656-1e53-4a24-9ad5-2b4576a4125d|
-|user1|1509037078537|null                                |f237e656-1e53-4a24-9ad5-2b4576a4125d|
-|user1|1509037378537|null                                |f237e656-1e53-4a24-9ad5-2b4576a4125d|
-|user1|1509044878537|null                                |9b17a92c-9a0b-430a-bf97-41034e5b6c6c|
-|user1|1509046078537|null                                |9b17a92c-9a0b-430a-bf97-41034e5b6c6c|
-|user2|1509036778537|null                                |5f4f0005-52f2-41f9-ab7b-ffc69ab1353f|
-|user2|1509037378537|null                                |5f4f0005-52f2-41f9-ab7b-ffc69ab1353f|
+|user1|1509036478537|f237e656-1e53-4a24-9ad5-2b4576a4125d|0                                   |
+|user1|1509037078537|null                                |0                                   |
+|user1|1509037378537|null                                |1                                   |
+|user1|1509044878537|null                                |1                                   |
+|user1|1509046078537|null                                |2                                   |
+|user2|1509036778537|null                                |0                                   |
+|user2|1509037378537|null                                |0                                   |
 +-----+-------------+------------------------------------+------------------------------------+
 
 ```
