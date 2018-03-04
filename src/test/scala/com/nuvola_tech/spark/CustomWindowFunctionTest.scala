@@ -26,13 +26,13 @@ class CustomWindowFunctionTest extends FlatSpec with SharedSparkContext  {
     val df = sqlContext.createDataFrame(sc.parallelize(d))
 
     val specs = Window.partitionBy(f.col("user")).orderBy(f.col("ts").asc)
-    val res = df.withColumn( "newsession", MyUDWF.calculateSession(f.col("ts"), f.col("session")) over specs)
+    val res = df.withColumn( "newsession", MyUDWF.calculateSession(f.col("ts")) over specs)
 
     df.show(20)
     res.show(20, false)
 
     // there should be 3 sessions
-    assert( res.groupBy(f.col("newsession")).agg(f.count("newsession")).count() == 3)
+    assert( res.groupBy(f.col("user"), f.col("newsession")).agg(f.count("newsession")).count() == 3)
 
   }
   it should "be able to use the window size as a parameter" in {
@@ -40,13 +40,13 @@ class CustomWindowFunctionTest extends FlatSpec with SharedSparkContext  {
     val df = sqlContext.createDataFrame(sc.parallelize(d))
 
     val specs = Window.partitionBy(f.col("user")).orderBy(f.col("ts").asc)
-    val res = df.withColumn( "newsession", MyUDWF.calculateSession(f.col("ts"), f.col("session"), f.lit(one_minute)) over specs)
+    val res = df.withColumn( "newsession", MyUDWF.calculateSession(f.col("ts"), f.lit(one_minute)) over specs)
 
     df.show(20)
     res.show(20, false)
 
     // there should be 3 sessions
-    assert( res.groupBy(f.col("newsession")).agg(f.count("newsession")).count() == 7)
+    assert( res.groupBy(f.col("user"), f.col("newsession")).agg(f.count("newsession")).count() == 7)
 
   }
   it should "be able to work without initial session" in {
@@ -54,13 +54,13 @@ class CustomWindowFunctionTest extends FlatSpec with SharedSparkContext  {
     val df = sqlContext.createDataFrame(sc.parallelize(d.drop(1))) // drop first
 
     val specs = Window.partitionBy(f.col("user")).orderBy(f.col("ts").asc)
-    val res = df.withColumn( "newsession", MyUDWF.calculateSession(f.col("ts"), f.col("session")) over specs)
+    val res = df.withColumn( "newsession", MyUDWF.calculateSession(f.col("ts")) over specs)
 
     df.show(20)
     res.show(20, false)
 
     // there should be 3 sessions
-    assert( res.groupBy(f.col("newsession")).agg(f.count("newsession")).count() == 3)
+    assert( res.groupBy(f.col("user"), f.col("newsession")).agg(f.count("newsession")).count() == 3)
 
   }
 
